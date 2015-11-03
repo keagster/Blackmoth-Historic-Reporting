@@ -1,6 +1,9 @@
 # PyCharm and IntelliJ Files
 .idea
 
+# Do not include database file
+*.db
+
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]

@@ -1,3 +1,9 @@
+"""
+
+This application can be executed as a cron or from and alternate service bus such as systemd
+
+"""
+
 import time
 import sqlite3
 import lib.trucks as trucks
@@ -27,7 +33,6 @@ class CaptureSystemIds:
     def get_data_thread(self, ip):
         """
         Have decided to bypass threading at this time as sqlite will lock to single thread
-
         Will resolve this issue once main is working
         """
         get_data_thread = Thread(target=self.get_data, args=[ip])
@@ -53,15 +58,18 @@ class RecordSystemIds:
     def sqlite_update(self):
         if self.system_ids != '':
             # Save Tiger Data to DB
-            sqlite.execute('INSERT INTO tigers(timedate, name, serial, item) VALUES(?, ?, ?, ?)',
-                           (self.time_date, self.system_ids['name'], self.system_ids['serial'], self.system_ids['item']))
-            sqlite.commit()
-            # Save Camera Data to DB
-            for entry in self.system_ids['cameras']:
-                if entry != '':
-                    sqlite.execute('INSERT INTO cameras(timedate, name, cam_serial, cam_item) VALUES(?, ?, ?, ?)',
-                                   (self.time_date, self.system_ids['name'], entry['serial'], entry['item']))
-                    sqlite.commit()
+            try:
+                sqlite.execute('INSERT INTO tigers(timedate, name, serial, item) VALUES(?, ?, ?, ?)',
+                               (self.time_date, self.system_ids['name'], self.system_ids['serial'], self.system_ids['item']))
+                sqlite.commit()
+                # Save Camera Data to DB
+                for entry in self.system_ids['cameras']:
+                    if entry != '':
+                        sqlite.execute('INSERT INTO cameras(timedate, name, cam_serial, cam_item) VALUES(?, ?, ?, ?)',
+                                       (self.time_date, self.system_ids['name'], entry['serial'], entry['item']))
+                        sqlite.commit()
+            except:
+                print('Error: RecordSystemIds: sqlite_update(): Failed to execute sql query please check system_ids')
         else:
             print('Error: RecordSystemIds: sqlite_update(): self.system_ids empty')
 
