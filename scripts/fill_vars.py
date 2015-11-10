@@ -7,6 +7,7 @@ import json
 import lib.trucks as trucks
 from threading import Thread
 
+
 class FillVars:
     def __init__(self):
         self.io = ''
