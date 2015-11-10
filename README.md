@@ -3,10 +3,14 @@ Service to log and monitor hardware on based on customer assets
 
 # Setup
 Dependencies
-Server
+
+### Server
+
 - Local or Remote PostgreSQL Server
 - Database
-Python
+
+### Python
+
 - psycopg2
 
 Install settings into lib/settings.
